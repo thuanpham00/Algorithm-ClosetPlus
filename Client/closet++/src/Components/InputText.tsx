@@ -38,33 +38,6 @@ export default function InputText({ listTransaction, setListTransaction, setResp
       setInputMinSup(parseFloat(data.min_sup))
       setInputMinConfidence(parseFloat(data.min_confidence))
       setInputMinLift(parseFloat(data.min_lift))
-
-      // const listTrans = [
-      //   {
-      //     id: "T1",
-      //     listItem: "A, C, W, T"
-      //   },
-      //   {
-      //     id: "T2",
-      //     listItem: "C, D, W"
-      //   },
-      //   {
-      //     id: "T3",
-      //     listItem: "A, C, T, W"
-      //   },
-      //   {
-      //     id: "T4",
-      //     listItem: "A, C, D, W"
-      //   },
-      //   {
-      //     id: "T5",
-      //     listItem: "A, C, D, T, W"
-      //   },
-      //   {
-      //     id: "T6",
-      //     listItem: "C, D, T"
-      //   }
-      // ]
       setListTransaction(listTrans)
     },
     (errors) => {
