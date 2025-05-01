@@ -1,91 +1,15 @@
-import { Pencil, Plus, Trash } from "lucide-react"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Pencil } from "lucide-react"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { schemaFormData, TypeSchemaFormData, TypeSchemaFormDataRun } from "./rule"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { ToastContainer, toast } from "react-toastify"
-import axios from "axios"
+import { TypeSchemaFormDataRun } from "./rule"
+import { ToastContainer } from "react-toastify"
+import { MiningResult, TransactionType } from "./type"
+import TreeNode from "./Components/Fptree"
+import InputText from "./Components/InputText"
+import InputFile from "./Components/InputFile"
 
-const formData = schemaFormData.pick(["numberTransaction", "min_sup", "min_confidence", "min_lift"])
-
-type FormData = Pick<TypeSchemaFormData, "numberTransaction" | "min_sup" | "min_lift" | "min_confidence">
-
-type FormDataRun = Pick<TypeSchemaFormDataRun, "transactions" | "min_sup" | "min_lift" | "min_confidence">
-
-type TransactionType = {
-  id: string
-  listItem: string
-}
-
-function App() {
-  const [typeInput, setTypeInput] = useState("text")
-  const [listTransaction, setListTransaction] = useState<TransactionType[]>([])
-
-  const { handleSubmit, register, watch } = useForm<FormData>({ resolver: yupResolver(formData) })
-
-  const handleSubmitForm = handleSubmit(
-    (data) => {
-      const n = Number(data.numberTransaction)
-      const arr = Array.from({ length: n }, (_, i) => i + 1)
-
-      const listTrans = arr.map((item) => {
-        const res = {
-          id: "T" + item,
-          listItem: ""
-        }
-        return res
-      })
-
-      setListTransaction(listTrans)
-    },
-    (errors) => {
-      if (errors.numberTransaction) {
-        toast.error(errors.numberTransaction.message, { autoClose: 1500 })
-      }
-      if (errors.min_sup) {
-        toast.error(errors.min_sup.message, { autoClose: 1500 })
-      }
-      if (errors.min_confidence) {
-        toast.error(errors.min_confidence.message, { autoClose: 1500 })
-      }
-      if (errors.min_lift) {
-        toast.error(errors.min_lift.message, { autoClose: 1500 })
-      }
-    }
-  )
-
-  const minSup = watch("min_sup")
-  const minConfidence = watch("min_confidence")
-  const minLift = watch("min_lift")
-  console.log(minSup, minLift, minConfidence)
-
-  const handleChangeList = (idTransaction: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const updatedList = listTransaction.map((item) => {
-      if (item.id === idTransaction) {
-        return {
-          ...item,
-          listItem: event.target.value
-        }
-      }
-      return item
-    })
-    setListTransaction(updatedList)
-  }
-
-  const handleAddTransaction = () => {
-    const listTransactionNew = [...listTransaction]
-    const lengthCurrent = listTransactionNew.length + 1
-    listTransactionNew.push({ id: "T" + lengthCurrent, listItem: "" })
-    setListTransaction(listTransactionNew)
-  }
-
-  const handleDeleteItem = (idItem: string) => {
-    const listTransactionNew = listTransaction.filter((item) => item.id !== idItem)
-    setListTransaction(listTransactionNew)
-  }
-
-  /**
-   * {
+/**
+  {
     "transactions": [
         ["a", "c", "t", "w"],
         ["c", "d", "w"],
@@ -97,44 +21,17 @@ function App() {
     "min_sup": 3,
     "min_confidence": 0.8,
     "min_lift": 1.0
-}
+  }
    */
 
-  const { handleSubmit: handleSubmitRunCloset } = useForm<FormDataRun>()
+export type FormDataRun = Pick<TypeSchemaFormDataRun, "transactions" | "min_sup" | "min_lift" | "min_confidence">
 
-  const handleSubmitRunClosetPlus = handleSubmitRunCloset(() => {
-    const getItemFromTransaction = listTransaction.map((item) => {
-      const normalizedString = item.listItem
-        .trim() // Loại bỏ khoảng trắng thừa ở đầu và cuối chuỗi
-        .replace(/\s*,\s*/g, ",") // Thay thế dấu phẩy (có hoặc không có khoảng trắng) bằng dấu phẩy chuẩn
+function App() {
+  const [typeInput, setTypeInput] = useState<"text" | "file">("text") // loại input // mặc định
+  const [listTransaction, setListTransaction] = useState<TransactionType[]>([]) // danh sách giao dịch // nằm ở cpn cha truyền xuống con xử lý
+  const [responseResult, setResponseResult] = useState<MiningResult | null>(null)
 
-      // Bước 2: Tách chuỗi thành mảng
-      const splitItem = normalizedString
-        .split(",") // Tách bằng dấu phẩy
-        .map((i) => i.trim()) // Loại bỏ khoảng trắng thừa ở mỗi item
-        .filter((i) => i !== "") // Loại bỏ các phần tử rỗng
-      return splitItem
-    })
-    const body = {
-      transactions: getItemFromTransaction,
-      min_sup: parseFloat(minSup),
-      min_confidence: parseFloat(minConfidence),
-      min_lift: parseFloat(minLift)
-    }
-    console.log(body)
-    axios
-      .post("http://localhost:8000/mine", body, {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then((response) => {
-        console.log("Dữ liệu:", response.data)
-      })
-      .catch((error) => {
-        console.error("Lỗi:", error)
-      })
-  })
+  const [file, setFile] = useState<File | null>(null)
 
   return (
     <div>
@@ -149,17 +46,21 @@ function App() {
 
       <div
         style={{ maxWidth: "1200px", width: "100%", margin: "20px auto" }}
-        className="p-8 border border-[#dedede] rounded-md"
+        className="p-8 border border-[#dedede] rounded-md shadow-xl bg-[#f2f2f2]"
       >
-        <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#FCB045] text-transparent bg-clip-text">
+        <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#FCB045] text-transparent bg-clip-text">
           Tìm tập phổ biến đóng với CLOSET++
-        </h1>
+        </h2>
 
         <div className="flex items-center gap-2">
           <button
             className={`p-2 flex items-center gap-2 ${typeInput === "text" ? "border-b-2 border-b-purple-500" : ""} transition-all duration-300 ease-in-out`}
             type="button"
-            onClick={() => setTypeInput("text")}
+            onClick={() => {
+              setTypeInput("text")
+              setResponseResult(null)
+              setListTransaction([])
+            }}
           >
             <Pencil size={12} />
             <span
@@ -169,120 +70,153 @@ function App() {
             </span>
           </button>
           <button
-            className={`p-2 flex items-center gap-2 ${typeInput === "excel" ? "border-b-2 border-b-purple-500" : ""} transition-all duration-300 ease-in-out`}
+            className={`p-2 flex items-center gap-2 ${typeInput === "file" ? "border-b-2 border-b-purple-500" : ""} transition-all duration-300 ease-in-out`}
             type="button"
-            onClick={() => setTypeInput("excel")}
+            onClick={() => {
+              setTypeInput("file")
+              setResponseResult(null)
+              setListTransaction([])
+            }}
           >
             <Pencil size={12} />
             <span
-              className={`${typeInput === "excel" ? "bg-gradient-to-r from-[#833AB4] to-[#FD1D1D] text-transparent bg-clip-text font-medium" : ""} transition-all duration-300 ease-in-out`}
+              className={`${typeInput === "file" ? "bg-gradient-to-r from-[#833AB4] to-[#FD1D1D] text-transparent bg-clip-text font-medium" : ""} transition-all duration-300 ease-in-out`}
             >
               Nhập với excel
             </span>
           </button>
         </div>
-        {typeInput === "text" && (
-          <div className="mt-4">
-            <form onSubmit={handleSubmitForm}>
-              <div className="flex items-center justify-between w-[500px]">
-                <span>Số lượng giao dịch</span>
-                <input
-                  placeholder="Nhập số giao dịch"
-                  className="p-2 border border-gray-300 rounded-md min-w-[300px]"
-                  {...register("numberTransaction")}
-                />
-              </div>
-              <div className="mt-2 flex items-center justify-between w-[500px]">
-                <span>Ngưỡng hỗ trợ tối thiểu</span>
-                <input
-                  placeholder="Nhập ngưỡng hỗ trợ tối thiểu"
-                  className="p-2 border border-gray-300 rounded-md min-w-[300px]"
-                  {...register("min_sup")}
-                />
-              </div>
-              <div className="mt-2 flex items-center justify-between w-[500px]">
-                <span>Ngưỡng độ tin cậy tối thiểu</span>
-                <input
-                  placeholder="Nhập ngưỡng độ tin cậy tối thiểu"
-                  className="p-2 border border-gray-300 rounded-md min-w-[300px]"
-                  {...register("min_confidence")}
-                />
-              </div>
-              <div className="mt-2 flex items-center justify-between w-[500px]">
-                <span>Ngưỡng độ nâng tối thiểu.</span>
-                <input
-                  placeholder="Nhập ngưỡng độ tin cậy tối thiểu"
-                  className="p-2 border border-gray-300 rounded-md min-w-[300px]"
-                  {...register("min_lift")}
-                />
-              </div>
-              <button
-                type="submit"
-                className="py-2 px-4 bg-blue-500 rounded-md text-sm text-white hover:bg-blue-400 duration-300"
-              >
-                Tạo giao dịch
-              </button>
-            </form>
 
-            {listTransaction.length > 0 && (
-              <form onSubmit={handleSubmitRunClosetPlus} className="mt-4">
-                <table
-                  style={{ border: "1px solid black", borderCollapse: "collapse" }}
-                  cellSpacing="0"
-                  cellPadding="4"
-                >
-                  <thead>
+        {typeInput === "text" && (
+          <InputText
+            listTransaction={listTransaction}
+            setListTransaction={setListTransaction}
+            setResponseResult={setResponseResult}
+          />
+        )}
+        {typeInput === "file" && <InputFile file={file} setFile={setFile} setResponseResult={setResponseResult} />}
+      </div>
+
+      {responseResult && (
+        <div
+          style={{ maxWidth: "1200px", width: "100%", margin: "20px auto" }}
+          className="p-8 border border-[#dedede] rounded-lg shadow-xl bg-[#f2f2f2]"
+        >
+          <h2 className="text-center text-xl font-bold mb-2 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#FCB045] text-transparent bg-clip-text">
+            Kết quả
+          </h2>
+
+          <div>
+            <div className="flex items-center gap-2 text-base">
+              <span>
+                1. Danh sách <strong>f_list</strong> đã được sắp xếp theo thứ tự giảm dần của độ hỗ trợ:
+              </span>
+              <span>
+                {responseResult?.f_list.map((item) => {
+                  const findItemCount = responseResult.fp_tree.item_counts[item]
+                  return (
+                    <span key={item}>
+                      {item}:{findItemCount},{" "}
+                    </span>
+                  )
+                })}
+              </span>
+            </div>
+
+            <div>
+              <h2>2. Xây dựng cây FP-tree Visualization</h2>
+              {responseResult && <TreeNode node={responseResult.fp_tree.root} />}
+            </div>
+
+            <div className="p-2 rounded-md border border-gray-500">
+              <h2 className="font-semibold">Các bước thực thi:</h2>
+              <div className="bg-[#f2f2f2]">
+                {responseResult &&
+                  responseResult.execution_steps.map((item) => {
+                    return (
+                      <div key={item} className="py-2 relative">
+                        <span className="absolute top-1/2 left-1 -translate-y-1/2 w-1 h-1 bg-black rounded-full"></span>
+                        <span className="ml-4">{item}</span>
+                      </div>
+                    )
+                  })}
+              </div>
+            </div>
+
+            <div className="mt-2 p-2 rounded-md border border-gray-500">
+              <h2 className="font-semibold">Các luật kết hợp:</h2>
+              <div className="bg-[#f2f2f2]">
+                {responseResult &&
+                  responseResult.association_rules.map((item) => {
+                    return (
+                      <div key={item.rule} className="py-2 relative">
+                        <span className="absolute top-1/2 left-1 -translate-y-1/2 w-1 h-1 bg-black rounded-full"></span>
+                        <span className="ml-4">{item.rule}</span>
+                      </div>
+                    )
+                  })}
+              </div>
+            </div>
+
+            <div className="mt-2 p-2 rounded-md border border-gray-500">
+              <h2 className="font-semibold">Header table:</h2>
+              <div className="bg-[#f2f2f2]">
+                <table className="min-w-full border border-gray-300 mt-4">
+                  <thead className="bg-gray-200">
                     <tr>
-                      <th style={{ border: "1px solid black" }}>TID (ID giao dịch)</th>
-                      <th style={{ border: "1px solid black" }}>Danh sách</th>
+                      <th className="px-4 py-2 border">Item</th>
+                      <th className="px-4 py-2 border">Count</th>
+                      <th className="px-4 py-2 border">Path</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {listTransaction.map((transaction) => {
-                      return (
-                        <tr key={transaction.id}>
-                          <td style={{ border: "1px solid black" }}>{transaction.id}</td>
-                          <td style={{ border: "1px solid black", width: "250px" }}>
-                            <input
-                              type="text"
-                              value={transaction.listItem}
-                              onChange={handleChangeList(transaction.id)}
-                              className="px-2 py-1 w-full outline-none bg-[#f2f2f2]"
-                            />
-                          </td>
-                          <td style={{ border: "1px solid black" }}>
-                            <button
-                              className="p-1 bg-red-100 rounded-full"
-                              onClick={() => handleDeleteItem(transaction.id)}
-                            >
-                              <Trash size={14} color="red" />
-                            </button>
-                          </td>
-                        </tr>
-                      )
-                    })}
+                    {responseResult &&
+                      Object.entries(responseResult.fp_tree.header_table).map(([item, entries]) =>
+                        entries.map((entry, idx) => (
+                          <tr key={`${item}-${idx}`}>
+                            <td className="border px-4 py-2">{item}</td>
+                            <td className="border px-4 py-2">{entry.count}</td>
+                            <td className="border px-4 py-2">{entry.path.join(" → ")}</td>
+                          </tr>
+                        ))
+                      )}
                   </tbody>
                 </table>
-                <button
-                  className="text-blue-500 text-right w-[410px] flex items-center justify-end hover:text-blue-400 duration-200 text-[14px] mt-1"
-                  onClick={handleAddTransaction}
-                >
-                  <Plus size={14} />
-                  Thêm giao dịch
-                </button>
+              </div>
+            </div>
 
-                <button
-                  type="submit"
-                  className="mt-4 block px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-400 duration-200"
-                >
-                  Chạy thuật toán
-                </button>
-              </form>
-            )}
+            <div className="mt-2">
+              <h2>3. Các tập hợp phổ biến đóng mà ta tìm được:</h2>
+              <div className="pl-4">
+                {responseResult &&
+                  responseResult.closed_itemsets.map((item, index) => (
+                    <span key={item.itemset} className="flex items-center gap-2">
+                      <span>{index + 1}</span>
+                      <strong>
+                        {item.itemset}: {item.support} <br />
+                      </strong>
+                    </span>
+                  ))}
+              </div>
+            </div>
+
+            <div className="mt-2">
+              <h2>4. Các tập hợp phổ biến mà ta tìm được:</h2>
+              <div className="pl-4">
+                {responseResult &&
+                  responseResult.frequent_itemsets.map((item, index) => (
+                    <span key={item.itemset} className="flex items-center gap-2">
+                      <span>{index + 1}</span>
+                      <strong>
+                        {item.itemset}: {item.support} <br />
+                      </strong>
+                    </span>
+                  ))}
+              </div>
+            </div>
           </div>
-        )}
-        {typeInput === "excel" && <div>Nhập thủ công</div>}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

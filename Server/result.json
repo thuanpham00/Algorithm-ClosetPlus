@@ -1,0 +1,343 @@
+{
+  "closed_itemsets": [
+    {
+      "itemset": "CWAT",
+      "support": 3
+    },
+    {
+      "itemset": "CT",
+      "support": 4
+    },
+    {
+      "itemset": "CWD",
+      "support": 3
+    },
+    {
+      "itemset": "CD",
+      "support": 4
+    },
+    {
+      "itemset": "CWA",
+      "support": 4
+    },
+    {
+      "itemset": "CW",
+      "support": 5
+    },
+    {
+      "itemset": "C",
+      "support": 6
+    }
+  ],
+  "frequent_itemsets": [
+    {
+      "itemset": "A",
+      "support": 4
+    },
+    {
+      "itemset": "C",
+      "support": 6
+    },
+    {
+      "itemset": "T",
+      "support": 4
+    },
+    {
+      "itemset": "W",
+      "support": 5
+    },
+    {
+      "itemset": "AC",
+      "support": 4
+    },
+    {
+      "itemset": "AT",
+      "support": 3
+    },
+    {
+      "itemset": "AW",
+      "support": 4
+    },
+    {
+      "itemset": "CT",
+      "support": 4
+    },
+    {
+      "itemset": "CW",
+      "support": 5
+    },
+    {
+      "itemset": "TW",
+      "support": 3
+    },
+    {
+      "itemset": "ACT",
+      "support": 3
+    },
+    {
+      "itemset": "ACW",
+      "support": 4
+    },
+    {
+      "itemset": "ATW",
+      "support": 3
+    },
+    {
+      "itemset": "CTW",
+      "support": 3
+    },
+    {
+      "itemset": "ACTW",
+      "support": 3
+    },
+    {
+      "itemset": "D",
+      "support": 4
+    },
+    {
+      "itemset": "CD",
+      "support": 4
+    },
+    {
+      "itemset": "DW",
+      "support": 3
+    },
+    {
+      "itemset": "CDW",
+      "support": 3
+    }
+  ],
+  "association_rules": [
+    {
+      "rule": "A => W",
+      "support": 0.6666666666666666,
+      "confidence": 1,
+      "lift": 1.2
+    },
+    {
+      "rule": "A => CW",
+      "support": 0.6666666666666666,
+      "confidence": 1,
+      "lift": 1.2
+    },
+    {
+      "rule": "AC => W",
+      "support": 0.6666666666666666,
+      "confidence": 1,
+      "lift": 1.2
+    },
+    {
+      "rule": "AT => W",
+      "support": 0.5,
+      "confidence": 1,
+      "lift": 1.2
+    },
+    {
+      "rule": "TW => A",
+      "support": 0.5,
+      "confidence": 1,
+      "lift": 1.5
+    },
+    {
+      "rule": "AT => CW",
+      "support": 0.5,
+      "confidence": 1,
+      "lift": 1.2
+    },
+    {
+      "rule": "TW => AC",
+      "support": 0.5,
+      "confidence": 1,
+      "lift": 1.5
+    },
+    {
+      "rule": "ACT => W",
+      "support": 0.5,
+      "confidence": 1,
+      "lift": 1.2
+    },
+    {
+      "rule": "CTW => A",
+      "support": 0.5,
+      "confidence": 1,
+      "lift": 1.5
+    }
+  ],
+  "fp_tree": {
+    "root": {
+      "item": null,
+      "count": 0,
+      "children": [
+        {
+          "item": "c",
+          "count": 6,
+          "children": [
+            {
+              "item": "w",
+              "count": 5,
+              "children": [
+                {
+                  "item": "a",
+                  "count": 4,
+                  "children": [
+                    {
+                      "item": "t",
+                      "count": 2,
+                      "children": []
+                    },
+                    {
+                      "item": "d",
+                      "count": 2,
+                      "children": [
+                        {
+                          "item": "t",
+                          "count": 1,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "item": "d",
+                  "count": 1,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "item": "d",
+              "count": 1,
+              "children": [
+                {
+                  "item": "t",
+                  "count": 1,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "header_table": {
+      "c": [
+        {
+          "count": 6,
+          "path": ["c"]
+        }
+      ],
+      "w": [
+        {
+          "count": 5,
+          "path": ["c", "w"]
+        }
+      ],
+      "a": [
+        {
+          "count": 4,
+          "path": ["c", "w", "a"]
+        }
+      ],
+      "t": [
+        {
+          "count": 2,
+          "path": ["c", "w", "a", "t"]
+        },
+        {
+          "count": 1,
+          "path": ["c", "w", "a", "d", "t"]
+        },
+        {
+          "count": 1,
+          "path": ["c", "d", "t"]
+        }
+      ],
+      "d": [
+        {
+          "count": 1,
+          "path": ["c", "w", "d"]
+        },
+        {
+          "count": 2,
+          "path": ["c", "w", "a", "d"]
+        },
+        {
+          "count": 1,
+          "path": ["c", "d"]
+        }
+      ]
+    },
+    "item_counts": {
+      "c": 6,
+      "w": 5,
+      "a": 4,
+      "t": 4,
+      "d": 4
+    }
+  },
+  "f_list": ["c", "w", "a", "d", "t"],
+  "execution_steps": [
+    "Built F-list: [('c', 6), ('w', 5), ('a', 4), ('d', 4), ('t', 4)]",
+    "Built FP-Tree from transactions",
+    "Checked dataset density: avg_count=2.5555555555555554, is_dense=False",
+    "Level 0: Mining FP-Tree with prefix [], items ['t', 'd', 'a', 'w', 'c']",
+    "Itemset ['t'] failed upward check: extended_itemset=['c', 't'] has same support",
+    "Built conditional tree for item t",
+    "Level 1: Mining FP-Tree with prefix ['t'], items ['a', 'w', 'c']",
+    "Itemset ['a', 't'] failed upward check: extended_itemset=['c', 'a', 't'] has same support",
+    "Built conditional tree for item a",
+    "Level 2: Mining FP-Tree with prefix ['t', 'a'], items ['w', 'c']",
+    "Itemset ['w', 'a', 't'] failed upward check: extended_itemset=['c', 'w', 'a', 't'] has same support",
+    "Built conditional tree for item w",
+    "Level 3: Mining FP-Tree with prefix ['t', 'a', 'w'], items ['c']",
+    "Itemset ['c', 'w', 'a', 't'] passed upward check",
+    "Added closed itemset ['c', 'w', 'a', 't'] with support 3",
+    "Built conditional tree for item c",
+    "Itemset ['c', 'a', 't'] failed upward check: extended_itemset=['c', 'w', 'a', 't'] has same support",
+    "Built conditional tree for item c",
+    "Itemset ['w', 't'] failed upward check: extended_itemset=['w', 'a', 't'] has same support",
+    "Built conditional tree for item w",
+    "Level 2: Mining FP-Tree with prefix ['t', 'w'], items ['c']",
+    "Itemset ['c', 'w', 't'] failed upward check: extended_itemset=['c', 'w', 'a', 't'] has same support",
+    "Built conditional tree for item c",
+    "Itemset ['c', 't'] passed upward check",
+    "Added closed itemset ['c', 't'] with support 4",
+    "Built conditional tree for item c",
+    "Itemset ['d'] failed upward check: extended_itemset=['c', 'd'] has same support",
+    "Built conditional tree for item d",
+    "Level 1: Mining FP-Tree with prefix ['d'], items ['w', 'c']",
+    "Itemset ['w', 'd'] failed upward check: extended_itemset=['c', 'w', 'd'] has same support",
+    "Built conditional tree for item w",
+    "Level 2: Mining FP-Tree with prefix ['d', 'w'], items ['c']",
+    "Itemset ['c', 'w', 'd'] passed upward check",
+    "Added closed itemset ['c', 'w', 'd'] with support 3",
+    "Built conditional tree for item c",
+    "Itemset ['c', 'd'] passed upward check",
+    "Added closed itemset ['c', 'd'] with support 4",
+    "Built conditional tree for item c",
+    "Itemset ['a'] failed upward check: extended_itemset=['c', 'a'] has same support",
+    "Built conditional tree for item a",
+    "Level 1: Mining FP-Tree with prefix ['a'], items ['w', 'c']",
+    "Itemset ['w', 'a'] failed upward check: extended_itemset=['c', 'w', 'a'] has same support",
+    "Built conditional tree for item w",
+    "Level 2: Mining FP-Tree with prefix ['a', 'w'], items ['c']",
+    "Itemset ['c', 'w', 'a'] passed upward check",
+    "Added closed itemset ['c', 'w', 'a'] with support 4",
+    "Built conditional tree for item c",
+    "Itemset ['c', 'a'] failed upward check: extended_itemset=['c', 'w', 'a'] has same support",
+    "Built conditional tree for item c",
+    "Itemset ['w'] failed upward check: extended_itemset=['c', 'w'] has same support",
+    "Built conditional tree for item w",
+    "Level 1: Mining FP-Tree with prefix ['w'], items ['c']",
+    "Itemset ['c', 'w'] passed upward check",
+    "Added closed itemset ['c', 'w'] with support 5",
+    "Built conditional tree for item c",
+    "Itemset ['c'] passed upward check",
+    "Added closed itemset ['c'] with support 6",
+    "Built conditional tree for item c",
+    "Generated frequent itemsets from closed itemsets",
+    "Generated association rules"
+  ],
+  "runtime": 0.0009715557098388672
+}
