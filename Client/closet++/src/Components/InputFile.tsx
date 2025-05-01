@@ -140,7 +140,6 @@ export default function InputFile({ setResponseResult, file, setFile }: Props) {
         accept=".xlsx,.xls"
         ref={refInput}
         onClick={(event) => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ;(event.target as any).value = null
         }}
         onChange={handleChangeFile}

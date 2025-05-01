@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Pencil } from "lucide-react"
 import { useState } from "react"
 import { TypeSchemaFormDataRun } from "./rule"
