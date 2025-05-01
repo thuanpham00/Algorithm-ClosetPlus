@@ -26,45 +26,45 @@ export default function InputText({ listTransaction, setListTransaction, setResp
   const { handleSubmit, register } = useForm<FormData>({ resolver: yupResolver(formData) })
   const handleSubmitForm = handleSubmit(
     (data) => {
-      // const n = Number(data.numberTransaction)
-      // const arr = Array.from({ length: n }, (_, i) => i + 1)
-      // const listTrans = arr.map((item) => {
-      //   const res = {
-      //     id: "T" + item,
-      //     listItem: ""
-      //   }
-      //   return res
-      // })
+      const n = Number(data.numberTransaction)
+      const arr = Array.from({ length: n }, (_, i) => i + 1)
+      const listTrans = arr.map((item) => {
+        const res = {
+          id: "T" + item,
+          listItem: ""
+        }
+        return res
+      })
       setInputMinSup(parseFloat(data.min_sup))
       setInputMinConfidence(parseFloat(data.min_confidence))
       setInputMinLift(parseFloat(data.min_lift))
 
-      const listTrans = [
-        {
-          id: "T1",
-          listItem: "A, C, W, T"
-        },
-        {
-          id: "T2",
-          listItem: "C, D, W"
-        },
-        {
-          id: "T3",
-          listItem: "A, C, T, W"
-        },
-        {
-          id: "T4",
-          listItem: "A, C, D, W"
-        },
-        {
-          id: "T5",
-          listItem: "A, C, D, T, W"
-        },
-        {
-          id: "T6",
-          listItem: "C, D, T"
-        }
-      ]
+      // const listTrans = [
+      //   {
+      //     id: "T1",
+      //     listItem: "A, C, W, T"
+      //   },
+      //   {
+      //     id: "T2",
+      //     listItem: "C, D, W"
+      //   },
+      //   {
+      //     id: "T3",
+      //     listItem: "A, C, T, W"
+      //   },
+      //   {
+      //     id: "T4",
+      //     listItem: "A, C, D, W"
+      //   },
+      //   {
+      //     id: "T5",
+      //     listItem: "A, C, D, T, W"
+      //   },
+      //   {
+      //     id: "T6",
+      //     listItem: "C, D, T"
+      //   }
+      // ]
       setListTransaction(listTrans)
     },
     (errors) => {
