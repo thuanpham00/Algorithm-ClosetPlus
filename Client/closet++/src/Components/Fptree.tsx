@@ -18,7 +18,12 @@ const colorPalette = [
   "#e4c1f9",
   "#7678ed",
   "#b2967d",
-  "#0f4c5c"
+  "#0f4c5c",
+  "#fb6f92",
+  "#344e41",
+  "#6c584c",
+  "#ff4d6d",
+  "#6d4c3d"
 ]
 
 function getRandomColor() {

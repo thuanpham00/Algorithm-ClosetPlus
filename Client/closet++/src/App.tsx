@@ -127,7 +127,7 @@ function App() {
               {responseResult && <TreeNode node={responseResult.fp_tree.root} />}
             </div>
 
-            <div className="p-2 rounded-md border border-gray-500">
+            <div className="mt-2 p-2 rounded-md border border-gray-400">
               <h2 className="font-semibold">Các bước thực thi:</h2>
               <div className="bg-[#f2f2f2]">
                 {responseResult &&
@@ -142,7 +142,7 @@ function App() {
               </div>
             </div>
 
-            <div className="mt-2 p-2 rounded-md border border-gray-500">
+            <div className="mt-4 p-2 rounded-md border border-gray-400">
               <h2 className="font-semibold">Các luật kết hợp:</h2>
               <div className="bg-[#f2f2f2]">
                 {responseResult &&
@@ -157,7 +157,7 @@ function App() {
               </div>
             </div>
 
-            <div className="mt-2 p-2 rounded-md border border-gray-500">
+            <div className="mt-4 p-2 rounded-md border border-gray-400">
               <h2 className="font-semibold">Header table:</h2>
               <div className="bg-[#f2f2f2]">
                 <table className="min-w-full border border-gray-300 mt-4">
@@ -184,7 +184,7 @@ function App() {
               </div>
             </div>
 
-            <div className="mt-2">
+            <div className="mt-4">
               <h2>3. Các tập hợp phổ biến đóng mà ta tìm được:</h2>
               <div className="pl-4">
                 {responseResult &&
@@ -199,7 +199,7 @@ function App() {
               </div>
             </div>
 
-            <div className="mt-2">
+            <div className="mt-4">
               <h2>4. Các tập hợp phổ biến mà ta tìm được:</h2>
               <div className="pl-4">
                 {responseResult &&
