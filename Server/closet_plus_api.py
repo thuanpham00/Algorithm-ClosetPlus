@@ -7,7 +7,7 @@ from itertools import combinations
 import time
 
 
-# uvicorn closet_plus_api:app --host 0.0.0.0 --port 8000
+# uvicorn closet_plus_api:app --host 0.0.0.0 --port 8999
 
 # Khởi tạo FastAPI
 app = FastAPI(title="Association Rule Mining API")

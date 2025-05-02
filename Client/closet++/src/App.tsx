@@ -18,7 +18,7 @@ import ExecutionStepItem from "./Components/Execution"
         ["a", "c", "d", "t", "w"],
         ["c", "d", "t"]
     ],
-    "min_sup": 3,
+    "min_sup": 3,2
     "min_confidence": 0.8,
     "min_lift": 1.0
   }
