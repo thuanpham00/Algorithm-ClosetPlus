@@ -5,7 +5,9 @@ from typing import List, Dict, Any
 from collections import defaultdict, OrderedDict
 from itertools import combinations
 import time
-import uuid
+
+
+# uvicorn closet_plus_api:app --host 0.0.0.0 --port 8000
 
 # Khởi tạo FastAPI
 app = FastAPI(title="Association Rule Mining API")
@@ -33,7 +35,7 @@ class MiningResponse(BaseModel):
     association_rules: List[Dict[str, Any]]
     fp_tree: Dict[str, Any]
     f_list: List[str]
-    execution_steps: List[str]
+    execution_steps: List[Dict[str, Any]]
     runtime: float
 
 # Định nghĩa các lớp và hàm thuật toán CLOSET+
@@ -101,23 +103,67 @@ def build_f_list(transactions, min_sup, execution_steps):
     
     f_list = [(item, count) for item, count in item_counts.items() if count >= min_sup]
     f_list.sort(key=lambda x: (-x[1], x[0]))
-    execution_steps.append(f"Built F-list: {[(item, count) for item, count in f_list]}")
+    
+    # Thêm vào execution_steps
+    step = {
+        "step": "Xây dựng danh sách F",
+        "sub_steps": [
+            {
+                "description": "Đếm tần suất xuất hiện của các mục",
+                "details": f"Tần suất mục: {dict(item_counts)}"
+            },
+            {
+                "description": "Lọc các mục có độ hỗ trợ >= min_sup",
+                "details": f"Danh sách F: {[(item, count) for item, count in f_list]}"
+            }
+        ]
+    }
+    execution_steps.append(step)
+    
     return [item for item, _ in f_list]
 
 def build_fp_tree(transactions, f_list, min_sup, execution_steps):
     fp_tree = FPTree()
+    sub_steps = []
     for trans in transactions:
         filtered_trans = [item for item in trans if item in f_list]
         filtered_trans.sort(key=lambda x: f_list.index(x))
         if filtered_trans:
             fp_tree.insert_transaction(filtered_trans)
-    execution_steps.append("Built FP-Tree from transactions")
+            sub_steps.append({
+                "description": "Thêm giao dịch vào FP-Tree",
+                "details": f"Filtered transaction: {filtered_trans}"
+            })
+    
+    # Thêm vào execution_steps
+    step = {
+        "step": "Xây dựng FP-Tree",
+        "sub_steps": sub_steps
+    }
+    execution_steps.append(step)
+    
     return fp_tree
 
-def is_dense_dataset(fp_tree, execution_steps, threshold=10):
+def is_dense_dataset(fp_tree, threshold=10, execution_steps=None):
     avg_count = fp_tree.get_avg_node_count()
     is_dense = avg_count > threshold
-    execution_steps.append(f"Checked dataset density: avg_count={avg_count}, is_dense={is_dense}")
+    
+    # Thêm vào execution_steps
+    step = {
+        "step": "Kiểm tra độ dày đặc của tập dữ liệu",
+        "sub_steps": [
+            {
+                "description": "Tính toán số lượng nút trung bình",
+                "details": f"Số lượng trung bình: {avg_count}"
+            },
+            {
+                "description": "Xác định độ dày đặc",
+                "details": f"Có dày đặc: {is_dense} (ngưỡng={threshold})"
+            }
+        ]
+    }
+    execution_steps.append(step)
+    
     return is_dense
 
 def compute_support(itemset, transactions):
@@ -132,14 +178,28 @@ def check_result_tree(result_tree, itemset, support):
             return False
     return True
 
-def check_upward(itemset, support, transactions, execution_steps):
+def check_upward(itemset, support, transactions, parent_step):
     itemset_set = set(itemset)
     trans_containing_itemset = [trans for trans in transactions if itemset_set.issubset(set(trans))]
     actual_support = len(trans_containing_itemset)
     
+    sub_steps = []
+    
     if actual_support != support:
-        execution_steps.append(f"Itemset {itemset} failed upward check: actual_support={actual_support}, expected={support}")
+        sub_steps.append({
+            "description": "Failed support check",
+            "details": f"Actual support: {actual_support}, Expected: {support}"
+        })
+        parent_step["sub_steps"].append({
+            "description": f"Check upward closure for {itemset}",
+            "sub_steps": sub_steps
+        })
         return False
+    
+    sub_steps.append({
+        "description": "Thành công kiểm tra độ hỗ trợ",
+        "details": f"Support: {actual_support}"
+    })
     
     for trans in trans_containing_itemset:
         for item in trans:
@@ -147,25 +207,57 @@ def check_upward(itemset, support, transactions, execution_steps):
                 extended_itemset = sorted(itemset + [item], key=lambda x: f_list.index(x) if x in f_list else float('inf'))
                 extended_support = compute_support(extended_itemset, transactions)
                 if extended_support == actual_support:
-                    execution_steps.append(f"Itemset {itemset} failed upward check: extended_itemset={extended_itemset} has same support")
+                    sub_steps.append({
+                        "description": "Thất bại trong mở rộng itemset",
+                        "details": f"Extended itemset {extended_itemset} có cùng support: {extended_support}"
+                    })
+                    parent_step["sub_steps"].append({
+                        "description": f"Kiểm tra tính đóng mở rộng cho {itemset}",
+                        "sub_steps": sub_steps
+                    })
                     return False
-    execution_steps.append(f"Itemset {itemset} passed upward check")
+    sub_steps.append({
+        "description": "Kiểm tra mở rộng itemset thành công",
+        "details": "Không tìm thấy tập siêu với cùng support"
+    })
+    
+    parent_step["sub_steps"].append({
+        "description": f"Kiểm tra tính đóng mở rộng cho {itemset}",
+        "sub_steps": sub_steps
+    })
     return True
 
-def is_closed(itemset, support, closed_itemsets, dense, result_tree, transactions, execution_steps):
+def is_closed(itemset, support, closed_itemsets, dense, result_tree, transactions, parent_step):
+    sub_steps = []
     if dense and result_tree is not None:
         result = check_result_tree(result_tree, itemset, support)
-        execution_steps.append(f"Checked closure for {itemset} using result_tree: is_closed={result}")
+        sub_steps.append({
+            "description": "Kiểm tra sử dụng result_tree",
+            "details": f"Is closed: {result}"
+        })
+        parent_step["sub_steps"].append({
+            "description": f"Kiểm tra tính đóng cho {itemset}",
+            "sub_steps": sub_steps
+        })
         return result
     else:
-        return check_upward(itemset, support, transactions, execution_steps)
+        parent_step["sub_steps"].append({
+            "description": f"Kiểm tra tính đóng cho {itemset}",
+            "sub_steps": []
+        })
+        result = check_upward(itemset, support, transactions, parent_step["sub_steps"][-1])
+        return result
 
-def update_result_tree(result_tree, itemset, support, execution_steps):
+def update_result_tree(result_tree, itemset, support, parent_step):
     result_tree[tuple(itemset)] = support
-    execution_steps.append(f"Updated result_tree with itemset {itemset}, support={support}")
+    parent_step["sub_steps"].append({
+        "description": "Cập nhật result_tree",
+        "details": f"Itemset: {itemset}, Support: {support}"
+    })
 
-def build_conditional_tree(fp_tree, item, min_sup, execution_steps):
+def build_conditional_tree(fp_tree, item, min_sup, parent_step):
     cond_tree = FPTree()
+    sub_steps = []
     for node in fp_tree.header_table[item]:
         count = node.count
         path = []
@@ -176,10 +268,24 @@ def build_conditional_tree(fp_tree, item, min_sup, execution_steps):
         path.reverse()
         if path:
             cond_tree.insert_transaction(path, count)
-    execution_steps.append(f"Built conditional tree for item {item}")
+            sub_steps.append({
+                "description": "Đã thêm conditional path",
+                "details": f"Path: {path}, Count: {count}"
+            })
+    
+    parent_step["sub_steps"].append({
+        "description": f"Xây dựng conditional tree cho item {item}",
+        "sub_steps": sub_steps
+    })
     return cond_tree
 
 def mine_fp_tree(fp_tree, prefix, min_sup, closed_itemsets, dense, transactions, f_list, result_tree, execution_steps, level=0):
+    step = {
+        "step": f"Khai thác FP-Tree (Level {level})",
+        "sub_steps": []
+    }
+    execution_steps.append(step)
+    
     header_table = OrderedDict()
     for item in f_list:
         if item in fp_tree.header_table:
@@ -191,7 +297,10 @@ def mine_fp_tree(fp_tree, prefix, min_sup, closed_itemsets, dense, transactions,
     if not dense:
         items.reverse()
     
-    execution_steps.append(f"Level {level}: Mining FP-Tree with prefix {prefix}, items {items}")
+    step["sub_steps"].append({
+        "description": "Khởi tạo header table",
+        "details": f"Items: {items}"
+    })
     
     for item in items:
         new_prefix = prefix + [item]
@@ -200,21 +309,39 @@ def mine_fp_tree(fp_tree, prefix, min_sup, closed_itemsets, dense, transactions,
         candidate = sorted(new_prefix, key=lambda x: f_list.index(x) if x in f_list else float('inf'))
         actual_support = compute_support(candidate, transactions)
         
+        candidate_step = {
+            "description": f"Xử lý node {candidate}",
+            "sub_steps": []
+        }
+        step["sub_steps"].append(candidate_step)
+        
         if any(set(candidate) == set(existing[0]) for existing in closed_itemsets):
-            execution_steps.append(f"Skipped candidate {candidate}: already in closed_itemsets")
+            candidate_step["sub_steps"].append({
+                "description": "Bỏ qua",
+                "details": "Đã là closed itemsets"
+            })
             continue
         
-        if actual_support >= min_sup and is_closed(candidate, actual_support, closed_itemsets, dense, result_tree, transactions, execution_steps):
+        if actual_support >= min_sup and is_closed(candidate, actual_support, closed_itemsets, dense, result_tree, transactions, candidate_step):
             closed_itemsets.append((candidate, actual_support))
-            execution_steps.append(f"Added closed itemset {candidate} with support {actual_support}")
+            candidate_step["sub_steps"].append({
+                "description": "Thêm vào closed itemset",
+                "details": f"Itemset: {candidate}, Support: {actual_support}"
+            })
             if dense:
-                update_result_tree(result_tree, candidate, actual_support, execution_steps)
+                update_result_tree(result_tree, candidate, actual_support, candidate_step)
         
-        cond_tree = build_conditional_tree(fp_tree, item, min_sup, execution_steps)
+        cond_tree = build_conditional_tree(fp_tree, item, min_sup, candidate_step)
         if cond_tree.header_table:
             mine_fp_tree(cond_tree, new_prefix, min_sup, closed_itemsets, dense, transactions, f_list, result_tree, execution_steps, level + 1)
 
 def generate_frequent_itemsets(closed_itemsets, execution_steps):
+    step = {
+        "step": "Tạo Frequent Itemsets",
+        "sub_steps": []
+    }
+    execution_steps.append(step)
+    
     frequent_itemsets = {}
     for itemset, support in closed_itemsets:
         itemset = tuple(sorted(itemset))
@@ -223,10 +350,20 @@ def generate_frequent_itemsets(closed_itemsets, execution_steps):
                 subset = tuple(sorted(subset))
                 if subset not in frequent_itemsets or frequent_itemsets[subset] < support:
                     frequent_itemsets[subset] = support
-    execution_steps.append("Generated frequent itemsets from closed itemsets")
+                    step["sub_steps"].append({
+                        "description": "Thêm vào frequent subset",
+                        "details": f"Subset: {subset}, Support: {support}"
+                    })
+    
     return [(list(subset), support) for subset, support in frequent_itemsets.items()]
 
 def generate_association_rules(frequent_itemsets, total_transactions, min_confidence=0.8, min_lift=1.0, execution_steps=None):
+    step = {
+        "step": "Sinh luật kết hợp",
+        "sub_steps": []
+    }
+    execution_steps.append(step)
+    
     association_rules = []
     support_dict = {tuple(itemset): support / total_transactions for itemset, support in frequent_itemsets}
     
@@ -247,28 +384,49 @@ def generate_association_rules(frequent_itemsets, total_transactions, min_confid
                 confidence = support_xy / support_x
                 
                 if confidence < min_confidence:
+                    step["sub_steps"].append({
+                        "description": "Bỏ qua luật",
+                        "details": f"Luật: {x} => {y}, Độ tin cậy: {confidence} < {min_confidence}"
+                    })
                     continue
                     
                 support_y = support_dict[y]
                 lift = confidence / support_y
                 
                 if lift <= min_lift:
+                    step["sub_steps"].append({
+                        "description": "Bỏ qua luật",
+                        "details": f"Luật: {x} => {y}, Lift: {lift} <= {min_lift}"
+                    })
                     continue
                     
-                association_rules.append({
+                rule = {
                     'rule': f"{''.join(x).upper()} => {''.join(y).upper()}",
                     'support': support_xy,
                     'confidence': confidence,
                     'lift': lift
+                }
+                association_rules.append(rule)
+                step["sub_steps"].append({
+                    "description": "Thêm luật kết hợp",
+                    "details": f"Luật: {rule['rule']}, Độ hỗ trợ: {rule['support']}, Độ tin cậy: {rule['confidence']}, Lift: {rule['lift']}"
                 })
-    execution_steps.append("Generated association rules")
+    
     return association_rules
 
 def closet_plus(transactions, min_sup, execution_steps):
     global f_list
     f_list = build_f_list(transactions, min_sup, execution_steps)
     if not f_list:
-        execution_steps.append("No frequent items found, returning empty closed itemsets")
+        execution_steps.append({
+            "step": "Check F-list",
+            "sub_steps": [
+                {
+                    "description": "Không tìm thấy frequent items",
+                    "details": "Trả về closed itemsets rỗng"
+                }
+            ]
+        })
         return [], f_list, None
     fp_tree = build_fp_tree(transactions, f_list, min_sup, execution_steps)
     dense = is_dense_dataset(fp_tree, execution_steps=execution_steps)
@@ -332,4 +490,4 @@ async def mine_association_rules(request: MiningRequest):
 # Chạy server
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=7900)

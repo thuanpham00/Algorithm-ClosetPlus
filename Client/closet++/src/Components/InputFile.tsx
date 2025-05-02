@@ -28,21 +28,26 @@ export default function InputFile({ setResponseResult, file, setFile }: Props) {
 
   const readExcelFiles = async (file: File): Promise<ExcelData> => {
     const allTransactions: string[][] = []
-    let minSup: number | undefined
-    let minConfidence: number | undefined
-    let minLift: number | undefined
+    let minSup: number | undefined = 0
+    let minConfidence: number | undefined = 0
+    let minLift: number | undefined = 0
 
     const data = await file.arrayBuffer()
     const workbook = XLSX.read(data)
 
     // Đọc sheet đầu tiên (dữ liệu giao dịch)
-    const transactionSheetName = workbook.SheetNames[0]
-    const transactionWorksheet = workbook.Sheets[transactionSheetName]
-    const transactionData = XLSX.utils.sheet_to_json(transactionWorksheet, { header: 1 }) as any[][]
+    const sheetName = workbook.SheetNames[0]
+    const workSheet = workbook.Sheets[sheetName]
+    const sheetData = XLSX.utils.sheet_to_json(workSheet, { header: 1 }) as any[][]
+
+    const paramRow = sheetData[1] // Hàng 2 (chỉ số 1)
+    minSup = Number(paramRow[1]) // Cột B (min_sup)
+    minConfidence = Number(paramRow[2]) // Cột C (min_confidence)
+    minLift = Number(paramRow[3]) // Cột D (min_lift)
 
     // Bỏ qua hàng tiêu đề (hàng 1: "Transaction") và đọc cột "Transaction"
-    const transactions = transactionData.slice(1).map((row) => {
-      const transactionString = row[0]
+    const transactions = sheetData.slice(1).map((row) => {
+      const transactionString = row[0] // Cột A
       if (!transactionString || typeof transactionString !== "string") return []
 
       // Chuẩn hóa chuỗi giao dịch
@@ -55,31 +60,7 @@ export default function InputFile({ setResponseResult, file, setFile }: Props) {
 
       return splitItems
     })
-
-    // Thêm các giao dịch từ file này vào danh sách tổng
     allTransactions.push(...transactions.filter((trans) => trans.length > 0))
-
-    // Đọc sheet thứ 2 (tham số)
-    if (workbook.SheetNames.length > 1) {
-      const paramSheetName = workbook.SheetNames[1]
-      const paramWorksheet = workbook.Sheets[paramSheetName]
-      const paramData = XLSX.utils.sheet_to_json(paramWorksheet, { header: 1 }) as any[][]
-
-      // Đọc các tham số từ sheet thứ 2
-      paramData.slice(1).forEach((row) => {
-        const param = row[0]?.toLowerCase()
-        const value = row[1]
-
-        if (param === "min_sup") minSup = Number(value)
-        if (param === "min_confidence") minConfidence = Number(value)
-        if (param === "min_lift") minLift = Number(value)
-      })
-    }
-
-    // Kiểm tra xem các tham số có được đọc thành công không
-    if (minSup === undefined || minConfidence === undefined || minLift === undefined) {
-      throw new Error("Không tìm thấy đầy đủ các tham số min_sup, min_confidence, min_lift trong file Excel")
-    }
 
     return {
       transactions: allTransactions,
@@ -115,7 +96,7 @@ export default function InputFile({ setResponseResult, file, setFile }: Props) {
       console.log("Dữ liệu gửi đi:", body)
 
       // Gọi API
-      const res = await axios.post("http://localhost:8000/mine", body, {
+      const res = await axios.post("http://localhost:8999/mine", body, {
         headers: {
           "Content-Type": "application/json"
         }

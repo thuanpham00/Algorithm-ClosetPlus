@@ -1,0 +1,1137 @@
+{
+  "execution_steps": [
+    {
+      "step": "Xây dựng danh sách F",
+      "sub_steps": [
+        {
+          "description": "Đếm tần suất xuất hiện của các mục",
+          "details": "Tần suất mục: {'a': 4, 'c': 6, 't': 4, 'w': 5, 'd': 4}"
+        },
+        {
+          "description": "Lọc các mục có độ hỗ trợ >= min_sup",
+          "details": "Danh sách F: [('c', 6), ('w', 5), ('a', 4), ('d', 4), ('t', 4)]"
+        }
+      ]
+    },
+    {
+      "step": "Xây dựng FP-Tree",
+      "sub_steps": [
+        {
+          "description": "Thêm giao dịch vào FP-Tree",
+          "details": "Filtered transaction: ['c', 'w', 'a', 't']"
+        },
+        {
+          "description": "Thêm giao dịch vào FP-Tree",
+          "details": "Filtered transaction: ['c', 'w', 'd']"
+        },
+        {
+          "description": "Thêm giao dịch vào FP-Tree",
+          "details": "Filtered transaction: ['c', 'w', 'a', 't']"
+        },
+        {
+          "description": "Thêm giao dịch vào FP-Tree",
+          "details": "Filtered transaction: ['c', 'w', 'a', 'd']"
+        },
+        {
+          "description": "Thêm giao dịch vào FP-Tree",
+          "details": "Filtered transaction: ['c', 'w', 'a', 'd', 't']"
+        },
+        {
+          "description": "Thêm giao dịch vào FP-Tree",
+          "details": "Filtered transaction: ['c', 'd', 't']"
+        }
+      ]
+    },
+    {
+      "step": "Kiểm tra độ dày đặc của tập dữ liệu",
+      "sub_steps": [
+        {
+          "description": "Tính toán số lượng nút trung bình",
+          "details": "Số lượng trung bình: 2.5555555555555554"
+        },
+        {
+          "description": "Xác định độ dày đặc",
+          "details": "Có dày đặc: False (ngưỡng=10)"
+        }
+      ]
+    },
+    {
+      "step": "Khai thác FP-Tree (Level 0)",
+      "sub_steps": [
+        {
+          "description": "Khởi tạo header table",
+          "details": "Items: ['t', 'd', 'a', 'w', 'c']"
+        },
+        {
+          "description": "Xử lý node ['t']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['t']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['t']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 4"
+                    },
+                    {
+                      "description": "Thất bại trong mở rộng itemset",
+                      "details": "Extended itemset ['c', 't'] có cùng support: 4"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Xây dựng conditional tree cho item t",
+              "sub_steps": [
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c', 'w', 'a'], Count: 2"
+                },
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c', 'w', 'a', 'd'], Count: 1"
+                },
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c', 'd'], Count: 1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Xử lý node ['d']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['d']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['d']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 4"
+                    },
+                    {
+                      "description": "Thất bại trong mở rộng itemset",
+                      "details": "Extended itemset ['c', 'd'] có cùng support: 4"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Xây dựng conditional tree cho item d",
+              "sub_steps": [
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c', 'w'], Count: 1"
+                },
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c', 'w', 'a'], Count: 2"
+                },
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c'], Count: 1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Xử lý node ['a']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['a']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['a']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 4"
+                    },
+                    {
+                      "description": "Thất bại trong mở rộng itemset",
+                      "details": "Extended itemset ['c', 'a'] có cùng support: 4"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Xây dựng conditional tree cho item a",
+              "sub_steps": [
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c', 'w'], Count: 4"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Xử lý node ['w']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['w']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['w']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 5"
+                    },
+                    {
+                      "description": "Thất bại trong mở rộng itemset",
+                      "details": "Extended itemset ['c', 'w'] có cùng support: 5"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Xây dựng conditional tree cho item w",
+              "sub_steps": [
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c'], Count: 5"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Xử lý node ['c']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['c']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['c']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 6"
+                    },
+                    {
+                      "description": "Kiểm tra mở rộng itemset thành công",
+                      "details": "Không tìm thấy tập siêu với cùng support"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Thêm vào closed itemset",
+              "details": "Itemset: ['c'], Support: 6"
+            },
+            {
+              "description": "Xây dựng conditional tree cho item c",
+              "sub_steps": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "step": "Khai thác FP-Tree (Level 1)",
+      "sub_steps": [
+        {
+          "description": "Khởi tạo header table",
+          "details": "Items: ['a', 'w', 'c']"
+        },
+        {
+          "description": "Xử lý node ['a', 't']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['a', 't']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['a', 't']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 3"
+                    },
+                    {
+                      "description": "Thất bại trong mở rộng itemset",
+                      "details": "Extended itemset ['c', 'a', 't'] có cùng support: 3"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Xây dựng conditional tree cho item a",
+              "sub_steps": [
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c', 'w'], Count: 3"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Xử lý node ['w', 't']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['w', 't']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['w', 't']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 3"
+                    },
+                    {
+                      "description": "Thất bại trong mở rộng itemset",
+                      "details": "Extended itemset ['w', 'a', 't'] có cùng support: 3"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Xây dựng conditional tree cho item w",
+              "sub_steps": [
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c'], Count: 3"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Xử lý node ['c', 't']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['c', 't']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['c', 't']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 4"
+                    },
+                    {
+                      "description": "Kiểm tra mở rộng itemset thành công",
+                      "details": "Không tìm thấy tập siêu với cùng support"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Thêm vào closed itemset",
+              "details": "Itemset: ['c', 't'], Support: 4"
+            },
+            {
+              "description": "Xây dựng conditional tree cho item c",
+              "sub_steps": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "step": "Khai thác FP-Tree (Level 2)",
+      "sub_steps": [
+        {
+          "description": "Khởi tạo header table",
+          "details": "Items: ['w', 'c']"
+        },
+        {
+          "description": "Xử lý node ['w', 'a', 't']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['w', 'a', 't']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['w', 'a', 't']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 3"
+                    },
+                    {
+                      "description": "Thất bại trong mở rộng itemset",
+                      "details": "Extended itemset ['c', 'w', 'a', 't'] có cùng support: 3"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Xây dựng conditional tree cho item w",
+              "sub_steps": [
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c'], Count: 3"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Xử lý node ['c', 'a', 't']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['c', 'a', 't']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['c', 'a', 't']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 3"
+                    },
+                    {
+                      "description": "Thất bại trong mở rộng itemset",
+                      "details": "Extended itemset ['c', 'w', 'a', 't'] có cùng support: 3"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Xây dựng conditional tree cho item c",
+              "sub_steps": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "step": "Khai thác FP-Tree (Level 3)",
+      "sub_steps": [
+        {
+          "description": "Khởi tạo header table",
+          "details": "Items: ['c']"
+        },
+        {
+          "description": "Xử lý node ['c', 'w', 'a', 't']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['c', 'w', 'a', 't']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['c', 'w', 'a', 't']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 3"
+                    },
+                    {
+                      "description": "Kiểm tra mở rộng itemset thành công",
+                      "details": "Không tìm thấy tập siêu với cùng support"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Thêm vào closed itemset",
+              "details": "Itemset: ['c', 'w', 'a', 't'], Support: 3"
+            },
+            {
+              "description": "Xây dựng conditional tree cho item c",
+              "sub_steps": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "step": "Khai thác FP-Tree (Level 2)",
+      "sub_steps": [
+        {
+          "description": "Khởi tạo header table",
+          "details": "Items: ['c']"
+        },
+        {
+          "description": "Xử lý node ['c', 'w', 't']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['c', 'w', 't']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['c', 'w', 't']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 3"
+                    },
+                    {
+                      "description": "Thất bại trong mở rộng itemset",
+                      "details": "Extended itemset ['c', 'w', 'a', 't'] có cùng support: 3"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Xây dựng conditional tree cho item c",
+              "sub_steps": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "step": "Khai thác FP-Tree (Level 1)",
+      "sub_steps": [
+        {
+          "description": "Khởi tạo header table",
+          "details": "Items: ['w', 'c']"
+        },
+        {
+          "description": "Xử lý node ['w', 'd']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['w', 'd']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['w', 'd']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 3"
+                    },
+                    {
+                      "description": "Thất bại trong mở rộng itemset",
+                      "details": "Extended itemset ['c', 'w', 'd'] có cùng support: 3"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Xây dựng conditional tree cho item w",
+              "sub_steps": [
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c'], Count: 3"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Xử lý node ['c', 'd']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['c', 'd']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['c', 'd']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 4"
+                    },
+                    {
+                      "description": "Kiểm tra mở rộng itemset thành công",
+                      "details": "Không tìm thấy tập siêu với cùng support"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Thêm vào closed itemset",
+              "details": "Itemset: ['c', 'd'], Support: 4"
+            },
+            {
+              "description": "Xây dựng conditional tree cho item c",
+              "sub_steps": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "step": "Khai thác FP-Tree (Level 2)",
+      "sub_steps": [
+        {
+          "description": "Khởi tạo header table",
+          "details": "Items: ['c']"
+        },
+        {
+          "description": "Xử lý node ['c', 'w', 'd']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['c', 'w', 'd']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['c', 'w', 'd']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 3"
+                    },
+                    {
+                      "description": "Kiểm tra mở rộng itemset thành công",
+                      "details": "Không tìm thấy tập siêu với cùng support"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Thêm vào closed itemset",
+              "details": "Itemset: ['c', 'w', 'd'], Support: 3"
+            },
+            {
+              "description": "Xây dựng conditional tree cho item c",
+              "sub_steps": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "step": "Khai thác FP-Tree (Level 1)",
+      "sub_steps": [
+        {
+          "description": "Khởi tạo header table",
+          "details": "Items: ['w', 'c']"
+        },
+        {
+          "description": "Xử lý node ['w', 'a']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['w', 'a']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['w', 'a']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 4"
+                    },
+                    {
+                      "description": "Thất bại trong mở rộng itemset",
+                      "details": "Extended itemset ['c', 'w', 'a'] có cùng support: 4"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Xây dựng conditional tree cho item w",
+              "sub_steps": [
+                {
+                  "description": "Đã thêm conditional path",
+                  "details": "Path: ['c'], Count: 4"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Xử lý node ['c', 'a']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['c', 'a']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['c', 'a']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 4"
+                    },
+                    {
+                      "description": "Thất bại trong mở rộng itemset",
+                      "details": "Extended itemset ['c', 'w', 'a'] có cùng support: 4"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Xây dựng conditional tree cho item c",
+              "sub_steps": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "step": "Khai thác FP-Tree (Level 2)",
+      "sub_steps": [
+        {
+          "description": "Khởi tạo header table",
+          "details": "Items: ['c']"
+        },
+        {
+          "description": "Xử lý node ['c', 'w', 'a']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['c', 'w', 'a']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['c', 'w', 'a']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 4"
+                    },
+                    {
+                      "description": "Kiểm tra mở rộng itemset thành công",
+                      "details": "Không tìm thấy tập siêu với cùng support"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Thêm vào closed itemset",
+              "details": "Itemset: ['c', 'w', 'a'], Support: 4"
+            },
+            {
+              "description": "Xây dựng conditional tree cho item c",
+              "sub_steps": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "step": "Khai thác FP-Tree (Level 1)",
+      "sub_steps": [
+        {
+          "description": "Khởi tạo header table",
+          "details": "Items: ['c']"
+        },
+        {
+          "description": "Xử lý node ['c', 'w']",
+          "sub_steps": [
+            {
+              "description": "Kiểm tra tính đóng cho ['c', 'w']",
+              "sub_steps": [
+                {
+                  "description": "Kiểm tra tính đóng mở rộng cho ['c', 'w']",
+                  "sub_steps": [
+                    {
+                      "description": "Thành công kiểm tra độ hỗ trợ",
+                      "details": "Support: 5"
+                    },
+                    {
+                      "description": "Kiểm tra mở rộng itemset thành công",
+                      "details": "Không tìm thấy tập siêu với cùng support"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": "Thêm vào closed itemset",
+              "details": "Itemset: ['c', 'w'], Support: 5"
+            },
+            {
+              "description": "Xây dựng conditional tree cho item c",
+              "sub_steps": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "step": "Tạo Frequent Itemsets",
+      "sub_steps": [
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('a',), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c',), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('t',), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('w',), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('a', 'c'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('a', 't'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('a', 'w'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c', 't'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c', 'w'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('t', 'w'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('a', 'c', 't'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('a', 'c', 'w'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('a', 't', 'w'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c', 't', 'w'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('a', 'c', 't', 'w'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c',), Support: 4"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('t',), Support: 4"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c', 't'), Support: 4"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('d',), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c', 'd'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('d', 'w'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c', 'd', 'w'), Support: 3"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('d',), Support: 4"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c', 'd'), Support: 4"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('a',), Support: 4"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('w',), Support: 4"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('a', 'c'), Support: 4"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('a', 'w'), Support: 4"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c', 'w'), Support: 4"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('a', 'c', 'w'), Support: 4"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c',), Support: 5"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('w',), Support: 5"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c', 'w'), Support: 5"
+        },
+        {
+          "description": "Thêm vào frequent subset",
+          "details": "Subset: ('c',), Support: 6"
+        }
+      ]
+    },
+    {
+      "step": "Sinh luật kết hợp",
+      "sub_steps": [
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a',) => ('c',), Lift: 1.0 <= 1.0"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c',) => ('a',), Độ tin cậy: 0.6666666666666666 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a',) => ('t',), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('t',) => ('a',), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Thêm luật kết hợp",
+          "details": "Luật: A => W, Độ hỗ trợ: 0.6666666666666666, Độ tin cậy: 1.0, Lift: 1.2"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('w',) => ('a',), Độ tin cậy: 0.7999999999999999 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c',) => ('t',), Độ tin cậy: 0.6666666666666666 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('t',) => ('c',), Lift: 1.0 <= 1.0"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c',) => ('w',), Lift: 1.0 <= 1.0"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('w',) => ('c',), Lift: 1.0 <= 1.0"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('t',) => ('w',), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('w',) => ('t',), Độ tin cậy: 0.6 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a',) => ('c', 't'), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c',) => ('a', 't'), Độ tin cậy: 0.5 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('t',) => ('a', 'c'), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a', 'c') => ('t',), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a', 't') => ('c',), Lift: 1.0 <= 1.0"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c', 't') => ('a',), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Thêm luật kết hợp",
+          "details": "Luật: A => CW, Độ hỗ trợ: 0.6666666666666666, Độ tin cậy: 1.0, Lift: 1.2"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c',) => ('a', 'w'), Độ tin cậy: 0.6666666666666666 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('w',) => ('a', 'c'), Độ tin cậy: 0.7999999999999999 < 0.8"
+        },
+        {
+          "description": "Thêm luật kết hợp",
+          "details": "Luật: AC => W, Độ hỗ trợ: 0.6666666666666666, Độ tin cậy: 1.0, Lift: 1.2"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a', 'w') => ('c',), Lift: 1.0 <= 1.0"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c', 'w') => ('a',), Độ tin cậy: 0.7999999999999999 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a',) => ('t', 'w'), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('t',) => ('a', 'w'), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('w',) => ('a', 't'), Độ tin cậy: 0.6 < 0.8"
+        },
+        {
+          "description": "Thêm luật kết hợp",
+          "details": "Luật: AT => W, Độ hỗ trợ: 0.5, Độ tin cậy: 1.0, Lift: 1.2"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a', 'w') => ('t',), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Thêm luật kết hợp",
+          "details": "Luật: TW => A, Độ hỗ trợ: 0.5, Độ tin cậy: 1.0, Lift: 1.5"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c',) => ('t', 'w'), Độ tin cậy: 0.5 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('t',) => ('c', 'w'), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('w',) => ('c', 't'), Độ tin cậy: 0.6 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c', 't') => ('w',), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c', 'w') => ('t',), Độ tin cậy: 0.6 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('t', 'w') => ('c',), Lift: 1.0 <= 1.0"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a',) => ('c', 't', 'w'), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c',) => ('a', 't', 'w'), Độ tin cậy: 0.5 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('t',) => ('a', 'c', 'w'), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('w',) => ('a', 'c', 't'), Độ tin cậy: 0.6 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a', 'c') => ('t', 'w'), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Thêm luật kết hợp",
+          "details": "Luật: AT => CW, Độ hỗ trợ: 0.5, Độ tin cậy: 1.0, Lift: 1.2"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a', 'w') => ('c', 't'), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c', 't') => ('a', 'w'), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c', 'w') => ('a', 't'), Độ tin cậy: 0.6 < 0.8"
+        },
+        {
+          "description": "Thêm luật kết hợp",
+          "details": "Luật: TW => AC, Độ hỗ trợ: 0.5, Độ tin cậy: 1.0, Lift: 1.5"
+        },
+        {
+          "description": "Thêm luật kết hợp",
+          "details": "Luật: ACT => W, Độ hỗ trợ: 0.5, Độ tin cậy: 1.0, Lift: 1.2"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a', 'c', 'w') => ('t',), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('a', 't', 'w') => ('c',), Lift: 1.0 <= 1.0"
+        },
+        {
+          "description": "Thêm luật kết hợp",
+          "details": "Luật: CTW => A, Độ hỗ trợ: 0.5, Độ tin cậy: 1.0, Lift: 1.5"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c',) => ('d',), Độ tin cậy: 0.6666666666666666 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('d',) => ('c',), Lift: 1.0 <= 1.0"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('d',) => ('w',), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('w',) => ('d',), Độ tin cậy: 0.6 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c',) => ('d', 'w'), Độ tin cậy: 0.5 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('d',) => ('c', 'w'), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('w',) => ('c', 'd'), Độ tin cậy: 0.6 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c', 'd') => ('w',), Độ tin cậy: 0.75 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('c', 'w') => ('d',), Độ tin cậy: 0.6 < 0.8"
+        },
+        {
+          "description": "Bỏ qua luật",
+          "details": "Luật: ('d', 'w') => ('c',), Lift: 1.0 <= 1.0"
+        }
+      ]
+    }
+  ]
+}

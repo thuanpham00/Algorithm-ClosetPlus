@@ -100,7 +100,7 @@ export default function InputText({ listTransaction, setListTransaction, setResp
     }
 
     try {
-      const res = await axios.post("http://localhost:8000/mine", body, {
+      const res = await axios.post("http://localhost:8999/mine", body, {
         headers: {
           "Content-Type": "application/json"
         }

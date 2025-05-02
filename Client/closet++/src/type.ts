@@ -1,3 +1,10 @@
+export type ExecutionStep = {
+  step?: string // Tùy chọn, chỉ có ở cấp cao nhất
+  description?: string // Tùy chọn, có ở các cấp sub-step
+  details?: string // Tùy chọn, có ở các cấp sub-step
+  sub_steps?: ExecutionStep[] // Tùy chọn, mảng các bước con (recursive)
+}
+
 export type MiningResult = {
   closed_itemsets: {
     itemset: string
@@ -35,7 +42,7 @@ export type MiningResult = {
     }
   }
   f_list: string[]
-  execution_steps: string[]
+  execution_steps: ExecutionStep[]
   runtime: number
 }
 

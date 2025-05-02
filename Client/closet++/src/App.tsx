@@ -6,6 +6,7 @@ import { MiningResult, TransactionType } from "./type"
 import TreeNode from "./Components/Fptree"
 import InputText from "./Components/InputText"
 import InputFile from "./Components/InputFile"
+import ExecutionStepItem from "./Components/Execution"
 
 /**
   {
@@ -130,15 +131,13 @@ function App() {
             <div className="mt-2 p-2 rounded-md border border-gray-400">
               <h2 className="font-semibold">Các bước thực thi:</h2>
               <div className="bg-[#f2f2f2]">
-                {responseResult &&
-                  responseResult.execution_steps.map((item) => {
-                    return (
-                      <div key={item} className="py-2 relative">
-                        <span className="absolute top-1/2 left-1 -translate-y-1/2 w-1 h-1 bg-black rounded-full"></span>
-                        <span className="ml-4">{item}</span>
-                      </div>
-                    )
-                  })}
+                {responseResult && responseResult.execution_steps.length > 0 ? (
+                  responseResult.execution_steps.map((item, index) => (
+                    <ExecutionStepItem index={index} key={index} step={item} level={0} />
+                  ))
+                ) : (
+                  <p className="text-gray-500 italic">Không có dữ liệu để hiển thị.</p>
+                )}
               </div>
             </div>
 
@@ -185,10 +184,10 @@ function App() {
             </div>
 
             <div className="mt-4">
-              <h2>3. Các tập hợp phổ biến đóng mà ta tìm được:</h2>
+              <h2>3. Các tập hợp phổ biến mà ta tìm được:</h2>
               <div className="pl-4">
                 {responseResult &&
-                  responseResult.closed_itemsets.map((item, index) => (
+                  responseResult.frequent_itemsets.map((item, index) => (
                     <span key={item.itemset} className="flex items-center gap-2">
                       <span>{index + 1}</span>
                       <strong>
@@ -200,10 +199,10 @@ function App() {
             </div>
 
             <div className="mt-4">
-              <h2>4. Các tập hợp phổ biến mà ta tìm được:</h2>
+              <h2>4. Các tập hợp phổ biến đóng mà ta tìm được:</h2>
               <div className="pl-4">
                 {responseResult &&
-                  responseResult.frequent_itemsets.map((item, index) => (
+                  responseResult.closed_itemsets.map((item, index) => (
                     <span key={item.itemset} className="flex items-center gap-2">
                       <span>{index + 1}</span>
                       <strong>
