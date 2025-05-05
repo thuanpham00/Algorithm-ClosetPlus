@@ -29,9 +29,9 @@ export type FormDataRun = Pick<TypeSchemaFormDataRun, "transactions" | "min_sup"
 function App() {
   const [typeInput, setTypeInput] = useState<"text" | "file">("text") // loại input // mặc định
   const [listTransaction, setListTransaction] = useState<TransactionType[]>([]) // danh sách giao dịch // nằm ở cpn cha truyền xuống con xử lý
-  const [responseResult, setResponseResult] = useState<MiningResult | null>(null)
-
   const [file, setFile] = useState<File | null>(null)
+
+  const [responseResult, setResponseResult] = useState<MiningResult | null>(null)
 
   return (
     <div>
@@ -75,7 +75,7 @@ function App() {
             onClick={() => {
               setTypeInput("file")
               setResponseResult(null)
-              setListTransaction([])
+              setFile(null)
             }}
           >
             <Pencil size={12} />

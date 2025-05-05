@@ -1,7 +1,7 @@
 import * as yup from "yup"
 
 export const schemaFormData = yup.object({
-  numberTransaction: yup
+  number_transaction: yup
     .string()
     .required("Số lượng giao dịch bắt buộc!")
     .matches(/^\d+$/, "Chỉ được nhập số, không được chứa ký tự chữ!"),

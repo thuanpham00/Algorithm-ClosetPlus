@@ -8,9 +8,9 @@ import { FormDataRun } from "src/App"
 import { schemaFormData, TypeSchemaFormData } from "src/rule"
 import { MiningResult, TransactionType } from "src/type"
 
-const formData = schemaFormData.pick(["numberTransaction", "min_sup", "min_confidence", "min_lift"])
+const formData = schemaFormData.pick(["number_transaction", "min_sup", "min_confidence", "min_lift"])
 
-type FormData = Pick<TypeSchemaFormData, "numberTransaction" | "min_sup" | "min_lift" | "min_confidence">
+type FormData = Pick<TypeSchemaFormData, "number_transaction" | "min_sup" | "min_lift" | "min_confidence">
 
 interface Props {
   listTransaction: TransactionType[]
@@ -26,7 +26,7 @@ export default function InputText({ listTransaction, setListTransaction, setResp
   const { handleSubmit, register } = useForm<FormData>({ resolver: yupResolver(formData) })
   const handleSubmitForm = handleSubmit(
     (data) => {
-      const n = Number(data.numberTransaction)
+      const n = Number(data.number_transaction)
       const arr = Array.from({ length: n }, (_, i) => i + 1)
       const listTrans = arr.map((item) => {
         const res = {
@@ -41,8 +41,8 @@ export default function InputText({ listTransaction, setListTransaction, setResp
       setListTransaction(listTrans)
     },
     (errors) => {
-      if (errors.numberTransaction) {
-        toast.error(errors.numberTransaction.message, { autoClose: 1500 })
+      if (errors.number_transaction) {
+        toast.error(errors.number_transaction.message, { autoClose: 1500 })
       }
       if (errors.min_sup) {
         toast.error(errors.min_sup.message, { autoClose: 1500 })
@@ -120,7 +120,7 @@ export default function InputText({ listTransaction, setListTransaction, setResp
           <input
             placeholder="Nhập số giao dịch"
             className="p-2 border border-gray-300 rounded-md min-w-[300px] text-[14px]"
-            {...register("numberTransaction")}
+            {...register("number_transaction")}
           />
         </div>
         <div className="mt-2 flex items-center justify-between w-[500px]">
