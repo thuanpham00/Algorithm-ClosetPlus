@@ -175,7 +175,7 @@ export default function InputText({ listTransaction, setListTransaction, setResp
                           type="text"
                           value={transaction.listItem}
                           onChange={handleChangeList(transaction.id)}
-                          className="px-2 py-1 w-full outline-none bg-[#f2f2f2]"
+                          className="px-2 py-1 w-full outline-none bg-[#fff]"
                         />
                       </td>
                       <td style={{ border: "1px solid black" }}>

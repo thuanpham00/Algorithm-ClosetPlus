@@ -45,16 +45,16 @@ function App() {
       </header>
 
       <div
-        style={{ maxWidth: "1200px", width: "100%", margin: "20px auto" }}
-        className="p-8 border border-[#dedede] rounded-md shadow-xl bg-[#f2f2f2]"
+        style={{ maxWidth: "1200px", width: "100%", margin: "30px auto" }}
+        className="p-8 border border-[#dedede] rounded-3xl shadow-xl bg-[#fff]"
       >
         <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#FCB045] text-transparent bg-clip-text">
           Tìm tập phổ biến đóng với CLOSET++
         </h2>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           <button
-            className={`p-2 flex items-center gap-2 ${typeInput === "text" ? "border-b-2 border-b-purple-500" : ""} transition-all duration-300 ease-in-out`}
+            className={`p-2 px-4 flex items-center gap-2 ${typeInput === "text" ? "bg-gradient-to-tr from-red-100 via-yellow-100 to-green-100 border border-purple-500 rounded-2xl" : ""} transition-all duration-300 ease-in-out`}
             type="button"
             onClick={() => {
               setTypeInput("text")
@@ -70,7 +70,7 @@ function App() {
             </span>
           </button>
           <button
-            className={`p-2 flex items-center gap-2 ${typeInput === "file" ? "border-b-2 border-b-purple-500" : ""} transition-all duration-300 ease-in-out`}
+            className={`p-2 px-4 flex items-center gap-2 ${typeInput === "file" ? "bg-gradient-to-tr from-red-100 via-yellow-100 to-green-100 border border-purple-500 rounded-2xl" : ""} transition-all duration-300 ease-in-out`}
             type="button"
             onClick={() => {
               setTypeInput("file")
@@ -87,30 +87,66 @@ function App() {
           </button>
         </div>
 
-        {typeInput === "text" && (
-          <InputText
-            listTransaction={listTransaction}
-            setListTransaction={setListTransaction}
-            setResponseResult={setResponseResult}
-          />
-        )}
-        {typeInput === "file" && <InputFile file={file} setFile={setFile} setResponseResult={setResponseResult} />}
+        <div className="flex justify-center">
+          {typeInput === "text" && (
+            <InputText
+              listTransaction={listTransaction}
+              setListTransaction={setListTransaction}
+              setResponseResult={setResponseResult}
+            />
+          )}
+          {typeInput === "file" && <InputFile file={file} setFile={setFile} setResponseResult={setResponseResult} />}
+        </div>
       </div>
 
       {responseResult && (
-        <div
-          style={{ maxWidth: "1200px", width: "100%", margin: "20px auto" }}
-          className="p-8 border border-[#dedede] rounded-lg shadow-xl bg-[#f2f2f2]"
-        >
-          <h2 className="text-center text-xl font-bold mb-2 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#FCB045] text-transparent bg-clip-text">
+        <div style={{ maxWidth: "1200px", width: "100%", margin: "20px auto" }}>
+          <h2 className="mt-8 text-center text-2xl font-bold mb-2 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#FCB045] text-transparent bg-clip-text">
             Kết quả
           </h2>
 
-          <div>
+          <div className="mt-4 flex items-stretch gap-4">
+            <div className="w-[50%] bg-gradient-to-br from-orange-100 via-yellow-50 to-purple-100 p-6 rounded-2xl shadow-xl border-2 border-orange-200">
+              <h2 className="text-orange-400 font-semibold text-xl">Tập hợp phổ biến</h2>
+              <div className="mt-2">
+                {responseResult &&
+                  responseResult.frequent_itemsets.map((item, index) => (
+                    <span
+                      key={item.itemset}
+                      className="flex items-center gap-2 bg-white mt-2 p-2 pl-4 rounded-md border-l-4 border-purple-400"
+                    >
+                      <span>{index + 1}</span>
+                      <strong>
+                        {item.itemset}: {item.support} <br />
+                      </strong>
+                    </span>
+                  ))}
+              </div>
+            </div>
+
+            <div className="w-[50%] bg-gradient-to-br from-red-100 via-yellow-50 to-purple-100 p-6 rounded-2xl shadow-xl border-2 border-orange-200">
+              <h2 className="text-purple-400 font-semibold text-xl">Tập hợp phổ biến đóng</h2>
+              <div className="mt-2">
+                {responseResult &&
+                  responseResult.closed_itemsets.map((item, index) => (
+                    <span
+                      key={item.itemset}
+                      className="flex items-center gap-2 bg-white mt-2 p-2 pl-4 rounded-md border-l-4 border-purple-400"
+                    >
+                      <span>{index + 1}</span>
+                      <strong>
+                        {item.itemset}: {item.support} <br />
+                      </strong>
+                    </span>
+                  ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="my-8 bg-[#fff] rounded-2xl p-4 border border-orange-300 shadow-xl">
+            <h2 className="text-xl text-purple-600 font-semibold">Danh sách f_list</h2>
             <div className="flex items-center gap-2 text-base">
-              <span>
-                1. Danh sách <strong>f_list</strong> đã được sắp xếp theo thứ tự giảm dần của độ hỗ trợ:
-              </span>
+              <span>Sắp xếp theo thứ tự giảm dần của độ hỗ trợ:</span>
               <span>
                 {responseResult?.f_list.map((item) => {
                   const findItemCount = responseResult.fp_tree.item_counts[item]
@@ -122,15 +158,60 @@ function App() {
                 })}
               </span>
             </div>
+          </div>
 
+          <div className="my-8 bg-[#fff] rounded-2xl p-4 border border-red-400 shadow-xl">
             <div>
-              <h2>2. Xây dựng cây FP-tree Visualization</h2>
+              <h2 className="text-xl text-red-600 font-semibold">Cây FP-tree Visualization</h2>
               {responseResult && <TreeNode node={responseResult.fp_tree.root} />}
             </div>
+          </div>
 
-            <div className="mt-2 p-2 rounded-md border border-gray-400">
-              <h2 className="font-semibold">Các bước thực thi:</h2>
-              <div className="bg-[#f2f2f2]">
+          <div className="my-8 bg-[#fff] rounded-2xl p-4 border border-yellow-400 shadow-2xl">
+            <h2 className="text-xl text-purple-600 font-semibold">Các luật kết hợp</h2>
+            <div className="mt-2">
+              {responseResult &&
+                responseResult.association_rules.map((item) => {
+                  return (
+                    <div key={item.rule} className="py-2 bg-[#f2f2f2] rounded-xl mt-2 border-l-4 border-purple-400">
+                      <span className="ml-4">{item.rule}</span>
+                    </div>
+                  )
+                })}
+            </div>
+          </div>
+
+          <div className="my-8 p-4 bg-[#fff] rounded-2xl shadow-xl border border-gray-400">
+            <h2 className="text-xl text-orange-600 font-semibold">Header table:</h2>
+            <div className="bg-[#f2f2f2]">
+              <table className="min-w-full border border-gray-300 mt-2">
+                <thead className="bg-gray-200">
+                  <tr>
+                    <th className="px-4 py-2 border">Item</th>
+                    <th className="px-4 py-2 border">Count</th>
+                    <th className="px-4 py-2 border">Path</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {responseResult &&
+                    Object.entries(responseResult.fp_tree.header_table).map(([item, entries]) =>
+                      entries.map((entry, idx) => (
+                        <tr key={`${item}-${idx}`}>
+                          <td className="border px-4 py-2">{item}</td>
+                          <td className="border px-4 py-2">{entry.count}</td>
+                          <td className="border px-4 py-2">{entry.path.join(" → ")}</td>
+                        </tr>
+                      ))
+                    )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <div className="my-8 p-4 bg-[#fff] rounded-2xl shadow-xl border border-red-400">
+              <h2 className="text-xl text-orange-600 font-semibold">Các bước thực thi</h2>
+              <div className="]">
                 {responseResult && responseResult.execution_steps.length > 0 ? (
                   responseResult.execution_steps.map((item, index) => (
                     <ExecutionStepItem index={index} key={index} step={item} level={0} />
@@ -138,78 +219,6 @@ function App() {
                 ) : (
                   <p className="text-gray-500 italic">Không có dữ liệu để hiển thị.</p>
                 )}
-              </div>
-            </div>
-
-            <div className="mt-4 p-2 rounded-md border border-gray-400">
-              <h2 className="font-semibold">Các luật kết hợp:</h2>
-              <div className="bg-[#f2f2f2]">
-                {responseResult &&
-                  responseResult.association_rules.map((item) => {
-                    return (
-                      <div key={item.rule} className="py-2 relative">
-                        <span className="absolute top-1/2 left-1 -translate-y-1/2 w-1 h-1 bg-black rounded-full"></span>
-                        <span className="ml-4">{item.rule}</span>
-                      </div>
-                    )
-                  })}
-              </div>
-            </div>
-
-            <div className="mt-4 p-2 rounded-md border border-gray-400">
-              <h2 className="font-semibold">Header table:</h2>
-              <div className="bg-[#f2f2f2]">
-                <table className="min-w-full border border-gray-300 mt-4">
-                  <thead className="bg-gray-200">
-                    <tr>
-                      <th className="px-4 py-2 border">Item</th>
-                      <th className="px-4 py-2 border">Count</th>
-                      <th className="px-4 py-2 border">Path</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {responseResult &&
-                      Object.entries(responseResult.fp_tree.header_table).map(([item, entries]) =>
-                        entries.map((entry, idx) => (
-                          <tr key={`${item}-${idx}`}>
-                            <td className="border px-4 py-2">{item}</td>
-                            <td className="border px-4 py-2">{entry.count}</td>
-                            <td className="border px-4 py-2">{entry.path.join(" → ")}</td>
-                          </tr>
-                        ))
-                      )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <h2>3. Các tập hợp phổ biến mà ta tìm được:</h2>
-              <div className="pl-4">
-                {responseResult &&
-                  responseResult.frequent_itemsets.map((item, index) => (
-                    <span key={item.itemset} className="flex items-center gap-2">
-                      <span>{index + 1}</span>
-                      <strong>
-                        {item.itemset}: {item.support} <br />
-                      </strong>
-                    </span>
-                  ))}
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <h2>4. Các tập hợp phổ biến đóng mà ta tìm được:</h2>
-              <div className="pl-4">
-                {responseResult &&
-                  responseResult.closed_itemsets.map((item, index) => (
-                    <span key={item.itemset} className="flex items-center gap-2">
-                      <span>{index + 1}</span>
-                      <strong>
-                        {item.itemset}: {item.support} <br />
-                      </strong>
-                    </span>
-                  ))}
               </div>
             </div>
           </div>

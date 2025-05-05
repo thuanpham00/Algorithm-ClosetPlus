@@ -111,26 +111,24 @@ export default function InputFile({ setResponseResult, file, setFile }: Props) {
 
   return (
     <form onSubmit={handleSubmitRunClosetPlusFile} className="mt-2">
-      <button className="p-2 px-4 bg-blue-500 rounded-md text-white text-[14px]" onClick={handleClickRef}>
-        Chọn file
-      </button>
-      <input
-        type="file"
-        className="hidden"
-        multiple
-        accept=".xlsx,.xls"
-        ref={refInput}
-        onClick={(event) => {
-          ;(event.target as any).value = null
-        }}
-        onChange={handleChangeFile}
-      />
-      {file && (
-        <div>
-          <div className="mt-2 text-[13px] text-gray-500">{file.name}</div>
-          <button className="p-2 px-4 bg-blue-500 text-white rounded-md text-[14px] mt-2">Chạy thuật toán</button>
-        </div>
-      )}
+      <div className="flex justify-start gap-2">
+        <button className="p-2 px-4 bg-blue-500 rounded-md text-white text-[14px]" onClick={handleClickRef}>
+          Chọn file
+        </button>
+        <input
+          type="file"
+          className="hidden"
+          multiple
+          accept=".xlsx,.xls"
+          ref={refInput}
+          onClick={(event) => {
+            ;(event.target as any).value = null
+          }}
+          onChange={handleChangeFile}
+        />
+        {file && <div className="mt-2 text-[13px] text-gray-500">{file.name}</div>}
+      </div>
+      {file && <button className="p-2 px-4 bg-blue-500 text-white rounded-md text-[14px] mt-2">Chạy thuật toán</button>}
     </form>
   )
 }
